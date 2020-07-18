@@ -1,2 +1,5 @@
-# LearningPython
-Notes of "流畅的python" book
+# Introduction
+这是《流程的Python》的读书笔记
+
+
+
