@@ -1,3 +1,6 @@
+# https://www.cnblogs.com/JetpropelledSnake/p/9094103.html
+# https://blog.csdn.net/sxingming/article/details/52449315
+
 import abc
 
 # FooInterface is an abstract class which cannot be instantiated because it inherits "abc.ABC".
