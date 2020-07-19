@@ -172,3 +172,58 @@ from unicodedata import name
     因为Python会为字典扩容，往字典里添加新键可能会改变已有键的顺序。
     * 为什么不应该在迭代循环 dict 或是 set 的同时往里添加元素？<br>
     因为Python会为字典扩容，如果你在迭代一个字典的所有键的过程中同时对字典进行修改，那么这个循环很有可能会跳过一些键——甚至是跳过那些字典中已经有的键。因此，对字典的迭代和修改，要分两步做。
+
+# 文本和字节序列
+* 什么是Unicode<br>
+Unicode把字符的标识（码位）和字节表述进行了区分：
+    * Unicode标准以4~6个十六进制数字表示，如：A的码位是U+0041，高音谱号的码位是U+1D11E
+    * 字符的具体表述（字节序列）取决于所用的编码：
+        * UTF8-8编码中，A(U+0041)编码成单字节\x41，欧元符号(U+20AC)编码成三字节\xe2\x82\xac
+        * 在UTF-16LE编码中，A(U+0041)编码成双字节\x41\x00，欧元符号(U+20AC)编码成两字节\xac\x20
+把码位转化成字节序列的过程是编码；把字节序列转换成码位的过程是解码。
+* `str`类型和`bytes`类型的区别
+```python
+s = 'café'
+# 4
+len(s)
+# <class 'str'>
+type(s)
+b = s.encode('utf8')
+# 5
+len(b)
+# b'caf\xc3\xa9'
+print(b)
+# <class 'bytes'>
+type(b)
+s2 = b.decode('utf8')
+# 'café'
+print(s2)
+```
+## 字节概要
+`bytes`或`bytearray`对象的各个元素是介于 0~255（含）之间的整数，是一个二进制序列。
+```python
+cafe = bytes('café', encoding='utf_8')
+# cafe: b'caf\xc3\xa9'
+# 99, cafe[0]返回一个整数，99是'c'的字节编码
+cafe[0]
+# b'c', cafe[:1]返回长度为1的bytes对象（切片返回相同类型的序列）
+cafe[:1]
+cafe_arr = bytearray(cafe)
+# cafe_arr: bytearray(b'caf\xc3\xa9')
+# bytearray(b'\xa9'), cafe_arr[-1:]返回bytearray对象
+cafe_arr[-1:]
+```
+* 如何显示二进制序列
+虽然二进制序列其实是整数序列，但是它们的字面量表示法表明其中有ASCII 文本。因此，各个字节的值可能会使用下列三种不同的方式显示：
+    * 可打印的ASCII字节（从空格到~），使用ASCII字符文本
+    * 制表符、换行符、回车符和\对应的字节，使用转义序列\t、\n、\r和`\\`
+    * 其他字节值，使用十六进制转义序列(例如，\x00表示空字节)
+* 编解码错误的原因
+    * 编码错误UnicodeEncodeError<br>
+    编码的目的是将Unicode文本转换成字节序列
+        * `utf8`或`utf16`可以编码任何Unicode字符串
+        * 当某种编码方式无法编码某字符时，可选择报错、忽略、或者替换此字符的操作
+    * 解码错误UnicodeDecodeError<br>
+    解码的目的是将字节序列转换成Unicode文本，并不是所有字节序列都是有效的`utf8`或`utf16`。
+        * 对于`utf8`或`utf16`解码方式，如果遇到无效的字节序列，会抛出异常
+        * 对于很多陈旧的8位解码方式，如`iso8859_1`，即使解码失败也不会抛出异常，而是出现乱码
