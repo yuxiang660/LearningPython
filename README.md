@@ -106,3 +106,69 @@ l[2:5] = [100]
     * list.sort就地排序，返回None
     * sorted返回一个新的list
 
+# 字典和集合
+## 泛映射类型
+* 哪些类型是可散列类型
+    * 原子不可变类型：str、bytes和数值类型
+    * frozenset
+    * 元组，要求元组内所有元素都是可散列类型
+* 常见的字典定义
+```python
+# a == b == c == d == e
+a = dict(one=1, two=2, three=3)
+b = {'one': 1, 'two': 2, 'three': 3}
+c = dict(zip(['one', 'two', 'three'], [1, 2, 3]))
+d = dict([('two', 2), ('one', 1), ('three', 3)])
+e = dict({'three': 3, 'one': 1, 'two': 2})
+```
+* 字典推导
+```python
+DIAL_CODES = [
+    (86, 'China'),
+    (91, 'India'),
+    (1, 'United States'),
+    (62, 'Indonesia'),
+    (55, 'Brazil'),
+    (92, 'Pakistan'),
+    (880, 'Bangladesh'),
+    (234, 'Nigeria'),
+    (7, 'Russia'),
+    (81, 'Japan'),
+]
+country_code = {country: code for code, country in DIAL_CODES}
+```
+* 如何处理找不到的键
+参见[code](./code/dict/index.py)
+    * d[k]<br>
+    如果找不到，会抛异常
+    * d.get(k, default)<br>
+    如果找不到，会返回default值替代
+    * d.setdefault(k, default).append(value)<br>
+    如果找不到，设置成默认值default，然后对默认值进行操作。相当于：
+    ```python
+    if key not in my_dict:
+        my_dict[key] = []
+    my_dict[key].append(new_value)
+    ```
+* 集合类型
+    * set<br>
+    不可散列
+    ```python
+    # set 的两种构造方法
+    s = {1,2,3}
+    s = set([1,2,3])
+    ```
+    * frozenset
+    可散列，冻结后的集合不能再添加或删除任何元素
+* 集合的推导
+集合的推导和字典的推导是一样的，都是用花括号`{}`
+```python
+#{'§', '=', '¢', '#', '¤', '<', '¥', 'μ', '×', '$', '¶', '£', '©', '°', '+', '÷', '±', '>', '¬', '®', '%'}
+from unicodedata import name
+{chr(i) for i in range(32, 256) if 'SIGN' in name(chr(i),'')}
+```
+* dict和set的背后：散列表    
+    * 为什么 dict 的键和 set 元素的顺序是跟据它们被添加的次序而定的，以及为什么在映射对象的生命周期中，这个顺序并不是一成不变的？<br>
+    因为Python会为字典扩容，往字典里添加新键可能会改变已有键的顺序。
+    * 为什么不应该在迭代循环 dict 或是 set 的同时往里添加元素？<br>
+    因为Python会为字典扩容，如果你在迭代一个字典的所有键的过程中同时对字典进行修改，那么这个循环很有可能会跳过一些键——甚至是跳过那些字典中已经有的键。因此，对字典的迭代和修改，要分两步做。
