@@ -1,7 +1,7 @@
 <!-- TOC -->
 
 - [Introduction](#introduction)
-- [Python数据类型](#python数据类型)
+- [Python数据模型](#python数据模型)
     - [如何使用特殊方法](#如何使用特殊方法)
 - [序列类型](#序列类型)
     - [列表list](#列表list)
@@ -19,7 +19,7 @@
 # Introduction
 这是《流程的Python》的读书笔记
 
-# Python数据类型
+# Python数据模型
 ## 如何使用特殊方法
 * 什么是Python的特殊方法
 两边都是双下划线的方法，是特殊方法。如：`def __len__(self)`, `def __getitem__(self, position)`等。特殊方法的存在是为了被Python解释器调用的，自己不需要调用。如：一般不写`obj.__len__()`，而写`len(obj)`。<br>
