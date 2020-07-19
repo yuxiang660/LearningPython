@@ -21,7 +21,7 @@
 
 ---
 
-<center>《流畅的Python》</center>
+<p align="center">《流畅的Python》</p>
 ---
 
 # Python数据模型
@@ -250,7 +250,7 @@ cafe_arr[-1:]
         * 对于很多陈旧的8位解码方式，如`iso8859_1`，即使解码失败也不会抛出异常，而是出现乱码
 
 ---
-<center>《Python Cookbook》</center>
+<p align="center">《Python Cookbook》</p>
 ---
 
 # 脚本编程与系统管理
