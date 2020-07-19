@@ -20,9 +20,7 @@
 这是《流畅的Python》和《Python Cookbook》的读书笔记
 
 ---
-
 <p align="center">《流畅的Python》</p>
----
 
 # Python数据模型
 ## 如何使用特殊方法
@@ -251,7 +249,6 @@ cafe_arr[-1:]
 
 ---
 <p align="center">《Python Cookbook》</p>
----
 
 # 脚本编程与系统管理
 
