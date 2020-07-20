@@ -1,6 +1,10 @@
 import subprocess
 import time
 import os
+import logging
+import logging.config
+
+logging.config.fileConfig('config.ini')
 
 class Command:
     def __init__(self, cmd, log_file):
@@ -9,7 +13,7 @@ class Command:
         self._elapsed = 0
 
     def run(self, timeout_s=None):
-        print('Start CMD:', self._cmd)
+        logging.info(f'Start CMD: {self._cmd}')
         start = time.time()
         with open(self._log_file, 'w') as f:
             try:
@@ -26,15 +30,15 @@ class Command:
             else:
                 self._elapsed = time.time() - start
                 f.write('End with runtime: {:.3f} seconds.'.format(self._elapsed))
-        print('End CMD:', self._cmd)
+        logging.info(f'End CMD: {self._cmd}')
 
-    def print_log(self):
-        print(f'The log of CMD "{self._cmd}":')
+    def print_cmd_log(self):
+        logging.info(f'The log of CMD "{self._cmd}":')
         if os.path.exists(self._log_file):
             with open(self._log_file, 'r') as f:
                 print(f.read())
 
 if __name__ == "__main__":
     cmd = Command('ls & sleep 1', 'output.log')
-    #cmd.run(1)
-    cmd.print_log()
+    cmd.run(1)
+    cmd.print_cmd_log()
