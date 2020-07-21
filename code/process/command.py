@@ -10,10 +10,9 @@ class Command:
     def __init__(self, cmd, log_file):
         self._cmd = cmd
         self._log_file = log_file
-        self._elapsed = 0
 
     def run(self, timeout_s=None):
-        logging.info(f'Start CMD: {self._cmd}')
+        logging.info(f"Start CMD: '{self._cmd}'")
         start = time.time()
         with open(self._log_file, 'w') as f:
             try:
@@ -25,12 +24,13 @@ class Command:
                                stdout=f,
                                stderr=f)
             except subprocess.TimeoutExpired as e:
-                print(e)
-                f.write('Error: Timeout!!!')
+                logging.error(e.__str__())
+                f.write(f'Error: {e.__str__()}')
             else:
-                self._elapsed = time.time() - start
-                f.write('End with runtime: {:.3f} seconds.'.format(self._elapsed))
+                elapsed = time.time() - start
+                f.write("End command '{}' with {:.3f} seconds.".format(self._cmd, elapsed))
         logging.info(f'End CMD: {self._cmd}')
+        return elapsed
 
     def print_cmd_log(self):
         logging.info(f'The log of CMD "{self._cmd}":')
@@ -39,6 +39,9 @@ class Command:
                 print(f.read())
 
 if __name__ == "__main__":
-    cmd = Command('ls & sleep 1', 'output.log')
-    cmd.run(1)
+    logfile = 'output/command.log'
+    os.makedirs(os.path.dirname(logfile), exist_ok=True)
+    cmd = Command('ls & sleep 1', 'output/command.log')
+    time1 = cmd.run(3)
+    print(f'The command runs {time1}s')
     cmd.print_cmd_log()
