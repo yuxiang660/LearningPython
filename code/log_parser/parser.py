@@ -1,9 +1,17 @@
 import json
+import re
 
 def parse_log(log_file):
     with open(log_file, 'r') as f:
-        print(f.read())
-        return True
+        lines = f.readlines()
+        for line in lines:
+            if re.match('error', line, re.IGNORECASE):
+                return False
+        for line in lines:
+            if re.match('TEST_PASSED', line):
+                return True
+    return False
+
 
 if __name__ == "__main__":
     with open('input.json', 'r') as f:
