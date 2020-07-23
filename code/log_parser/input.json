@@ -1,0 +1,10 @@
+{
+    "test2":{
+        "log_file": "./log/test2.sample",
+        "run_time": 2.881223
+    },
+    "test1":{
+        "log_file": "./log/test1.sample",
+        "run_time": 0.881232
+    }
+}
