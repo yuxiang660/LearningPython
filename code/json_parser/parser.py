@@ -27,3 +27,5 @@ if __name__ == "__main__":
     print(test_root)
     print(test_result_root)
     print(log_file)
+
+    print(json.dumps(data, indent=4))
